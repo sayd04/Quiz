@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!-- Google Identity Services (only needed if using GSI login) -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-
-  <base href="/">
-
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="QuizIT - Java Programming Quiz Game">
@@ -19,7 +14,7 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>QuizIT - Java Programming Game</title>
+  <title>QuizIT</title>
   <link rel="manifest" href="manifest.json">
 
   <style>
@@ -65,9 +60,9 @@
       opacity: 0.8;
     }
 
-    /* Hide loading screen when Flutter loads */
-    .loaded .loading {
-      display: none;
+    #flutter-container {
+      height: 100vh;
+      width: 100vw;
     }
   </style>
 </head>
@@ -82,30 +77,30 @@
   <!-- Flutter app container -->
   <div id="flutter-container"></div>
 
-  <!-- Load and initialize Flutter -->
-  <script src="flutter.js" defer></script>
+  <!-- This script adds the flutter initialization JS code -->
+  <script src="main.dart.js" type="application/javascript"></script>
+  
+  <script>
+    // The value below is injected by flutter build, do not touch.
+    const serviceWorkerVersion = null;
+  </script>
   <script>
     window.addEventListener('load', function(ev) {
-      // Load and initialize Flutter using the new API
-      _flutter.loader.load({
-        serviceWorkerSettings: {
-          serviceWorkerVersion: null,
-        },
+      _flutter.loader.loadEntrypoint({
+        serviceWorker: {
+          serviceWorkerVersion: serviceWorkerVersion,
+        }
       }).then(function(engineInitializer) {
         return engineInitializer.initializeEngine();
       }).then(function(appRunner) {
         // Hide loading screen
         document.getElementById('loading').style.display = 'none';
-        document.body.classList.add('loaded');
-        
-        // Start Flutter app
         return appRunner.runApp();
       }).catch(function(error) {
         console.error('Failed to load Flutter app:', error);
-        // Show error message instead of loading screen
         document.getElementById('loading').innerHTML = `
           <div class="logo">Error Loading App</div>
-          <div class="subtitle">Please check the console for details</div>
+          <div class="subtitle">${error.message}</div>
         `;
       });
     });
